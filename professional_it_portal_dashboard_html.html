@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Management Portal</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #020617, #0f172a, #111827);
+      color: white;
+      min-height: 100vh;
+      padding: 30px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.18), transparent 70%);
+      top: -200px;
+      right: -150px;
+      z-index: -1;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(14,165,233,0.12), transparent 70%);
+      bottom: -180px;
+      left: -120px;
+      z-index: -1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+      animation: fadeDown 0.8s ease;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #ffffff, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header p {
+      color: #94a3b8;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+
+    .stats {
+      background: rgba(30, 41, 59, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 22px 30px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+      min-width: 180px;
+    }
+
+    .stats p {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .stats h2 {
+      font-size: 34px;
+      margin-top: 8px;
+      color: #60a5fa;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: rgba(30, 41, 59, 0.72);
+      backdrop-filter: blur(14px);
+      border-radius: 28px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s ease;
+      animation: fadeUp 0.8s ease;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #2563eb, #0ea5e9);
+      top: 0;
+      left: 0;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 45px rgba(37,99,235,0.25);
+      border-color: rgba(96,165,250,0.35);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .card-header h2 {
+      font-size: 23px;
+      font-weight: 600;
+    }
+
+    .badge {
+      background: linear-gradient(to right, #2563eb, #0ea5e9);
+      padding: 8px 14px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(37,99,235,0.35);
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .portal-link {
+      background: rgba(51, 65, 85, 0.65);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 16px 18px;
+      border-radius: 18px;
+      text-decoration: none;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portal-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transition: 0.6s;
+    }
+
+    .portal-link:hover::before {
+      left: 100%;
+    }
+
+    .portal-link:hover {
+      background: rgba(71, 85, 105, 0.85);
+      border-color: rgba(96,165,250,0.4);
+      transform: translateX(5px);
+    }
+
+    .portal-link span {
+      color: #60a5fa;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 50px;
+      background: rgba(30, 41, 59, 0.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 28px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+    }
+
+    .footer h3 {
+      font-size: 30px;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, #fff, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer p {
+      color: #94a3b8;
+      line-height: 1.8;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media(max-width:768px) {
+      body {
+        padding: 20px;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header h1 {
+        font-size: 38px;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <h1>RVCC - IT Portal</h1>
+      <p>Centralized dashboard for all company portals and systems</p>
+    </div>
+
+    <div class="stats">
+      <p>Total Portals</p>
+      <h2 id="portalCount">0</h2>
+    </div>
+  </div>
+
+  <div class="container" id="portalContainer"></div>
+
+  <div class="footer">
+    <h3>Unified IT Access Center</h3>
+    <p>
+      Professional centralized dashboard for ERP systems, infrastructure,
+      cloud services, hosting, networking, monitoring, and productivity tools.
+    </p>
+  </div>
+
+  <script>
+    const portalData = [
+      {
+        category: 'Infrastructure & Servers',
+        items: [
+          ['Asset Management', 'http://145.223.103.92'],
+          ['Windows Server', 'http://192.168.1.2'],
+          ['Synology NAS DSM', 'https://192.168.1.21:5001/'],
+          ['VOIP Panel', 'https://192.168.1.5:8089/'],
+          ['Camera Access', 'http://192.168.1.101']
+        ]
+      },
+      {
+        category: 'Security & Monitoring',
+        items: [
+          ['Action1 RMM', 'https://app.eu.action1.com'],
+          ['Sophos Central', 'http://192.168.1.1:4444'],
+          ['Bitdefender', 'https://account.bitdefender.com/'],
+          ['Trustifi', 'https://app.trustifi.com/']
+        ]
+      },
+      {
+        category: 'Microsoft & Email',
+        items: [
+          ['Microsoft 365 Admin', 'https://admin.microsoft.com'],
+          ['Gmail', 'https://mail.google.com/'],
+          ['Outlook', 'https://outlook.office.com/'],
+          ['OneDrive', 'https://onedrive.live.com/']
+        ]
+      },
+      {
+        category: 'Hosting & Development',
+        items: [
+          ['GoDaddy', 'https://sso.godaddy.com/'],
+          ['Hostinger', 'https://auth.hostinger.com/login'],
+          ['GitHub', 'https://github.com/login'],
+          ['Netlify', 'https://app.netlify.com/login']
+        ]
+      },
+      {
+        category: 'ERP',
+        items: [
+          ['Xpedeon Live', 'https://online.onxpedeon.com/login'],
+          ['Xpedeon Test', 'https://online.onxpedeon.com/login'],
+          ['SAP Ariba', 'https://service.ariba.com/'],
+        ]
+      },
+      {
+        category: 'Business Systems',
+        items: [
+          ['SAP Ariba', 'https://service.ariba.com/'],
+          ['Tap Payments', 'https://businesses.tap.company/default.aspx'],
+          ['AFAQY Vehicle', 'https://afaqy.pro/auth/login']
+        ]
+      },
+      {
+        category: 'Networking & Telecom',
+        items: [
+          ['STC Business', 'https://business.stc.com.sa/'],
+          ['Mobily Portal', 'https://www.mobily.com.sa/'],
+          ['Ruijie Cloud', 'https://cloud-me.ruijienetworks.com/'],
+          ['Linksys Router', 'http://192.168.1.54/']
+        ]
+      }
+    ];
+
+    const container = document.getElementById('portalContainer');
+    let total = 0;
+
+    portalData.forEach(section => {
+      total += section.items.length;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      let linksHTML = '';
+
+      section.items.forEach(item => {
+        linksHTML += `
+          <a class="portal-link" href="${item[1]}" target="_blank">
+            ${item[0]}
+            <span>Open ↗</span>
+          </a>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="card-header">
+          <h2>${section.category}</h2>
+          <div class="badge">${section.items.length} Links</div>
+        </div>
+        <div class="links">
+          ${linksHTML}
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+    document.getElementById('portalCount').innerText = total;
+  </script>
+
+</body>
+</html>
